@@ -5,6 +5,8 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include <QDebug>
+#include<QtMath>
+#include <QFont>
 My_pushbutton::My_pushbutton(QString normalimg,QString pressimg,QSize size):Normalpath(normalimg),Presspath(pressimg)
 {
     this->size=size;
@@ -75,62 +77,102 @@ void My_pushbutton::mouseReleaseEvent(QMouseEvent *e)
 
 
 
-My_dragwidget::My_dragwidget(QString filename,QSize temsize)
-{
-    pixmap=filename;
-    size=pixmap.size();
 
-    if(temsize!=QSize(-1,-1))
-    {
-        pixmap=pixmap.scaled(temsize);
-        size=temsize;
-    }
+//showanddisappear
+show_message::show_message(QSize size,gamewindow *_game):game(_game)
+{
     setFixedSize(size);
+//    setStyleSheet(QString::fromUtf8("border:1px solid red"));
+
+    towerimage=new QLabel;
+    towerimage->setParent(this);
+    towerimage->move(width()/2,20);
+    towerimage->setFixedSize(width()/2,height()/2);
+    QFont font( "Microsoft YaHei", 10, 75);
+
+    towerlevel=new QLabel;
+    towerlevel->setParent(this);
+    towerlevel->move(20,20);
+    towerlevel->setFixedWidth(width()/2);
+    towerlevel->setFixedHeight(40);
+    towerlevel->setFont(font);
+    towerlevel->setStyleSheet(QString("color:red;"));
+
+    towername=new QLabel;
+    towername->setParent(this);
+    towername->move(20,80);
+    towername->setFixedSize(width()/2,40);
+    towername->setFont(font);
+    towername->setStyleSheet(QString("color:red;"));
+
+    levelup=new My_pushbutton(":/levelup","",QSize(width()/4,height()/8));
+    levelup->setParent(this);
+    levelup->move(0,size.height()/4*3);
+
+
+
+    destroy=new My_pushbutton(":/delete","",QSize(width()/4,height()/8));
+    destroy->setParent(this);
+    destroy->move(width()/2,height()/4*3);
+
 
 }
-void My_dragwidget::setpos(QPoint pos)
+show_message::~show_message()
 {
-    setPosition=pos;move(setPosition);
+    delete towerimage;
+    delete towerlevel;
+    delete towername;
+    delete levelup;
+    delete destroy;
 }
 
-void My_dragwidget::mousePressEvent(QMouseEvent * event)
+void show_message::changeEnemy(tower *_tower)
 {
-    if (event->button() == Qt::LeftButton) //点击左边鼠标
-    {
-         dragPosition = event->globalPos() - frameGeometry().topLeft();
-         //globalPos()获取根窗口的相对路径，frameGeometry().topLeft()获取主窗口左上角的位置
-         event->accept();   //鼠标事件被系统接收
-    }
+        if(_tower->show_name()=="basetower")
+        {
+            towerimage->setPixmap(QPixmap(":/tower-base"));
 
-}
+        }
+        else if(_tower->show_name()=="slowtower")
+            towerimage->setPixmap(QPixmap(":/slowtower"));
+        towername->setText(QString("Name: %1").arg(_tower->show_name()));
+        towerlevel->setText(QString("Level: %1").arg(_tower->level));
 
-void My_dragwidget::mouseMoveEvent(QMouseEvent * event)
-{
-    if (event->buttons() == Qt::LeftButton) //当满足鼠标左键被点击时。
-    {
-         move(event->globalPos() - dragPosition);//移动窗口
-         event->accept();
-    }
-}
-void My_dragwidget::mouseReleaseEvent(QMouseEvent *event)
-{
-        releasepoint=QPoint(pos().x()+width()/2,pos().y()+height()/2);
-        qDebug()<<showpos();
-        move(setPosition);
-        emit want_to_set_tower();
-        event->accept();
+        disconnect(levelup,0,0,0);
+        disconnect(destroy,0,0,0);
+        connect(levelup,My_pushbutton::clicked,[=](){
 
+            game->uplevel(_tower);
+            towerlevel->setText(QString("Level: %1").arg(_tower->level));
+                levelup->zoom1();
+                levelup->zoom2();
+          });
+        connect(destroy,My_pushbutton::clicked,[=](){
+            destroy->zoom1();
+            destroy->zoom2();
+              game->destroy_tower(_tower);
+              disconnect(levelup,0,0,0);
+              disconnect(destroy,0,0,0);
+          });
 }
+void show_message::paintEvent(QPaintEvent *event)
+{
+//    QPainterPath path;
+//       path.setFillRule(Qt::WindingFill);
+    //       path.addRect(10, 10, this->width()-20, this->height()-20);
 
-void My_dragwidget::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);//创建一个QPainter对象
-    painter.drawPixmap(0,0,size.width(),size.height(),QPixmap(pixmap));//绘制图片到窗口
-    /*
-      QPixmap(":/images/Watermelon.png")如果改为QPixmap()，则只能看到绘制出的框架，看不到图片颜色，也就是看不到图片。
-    */
-}
-QPoint My_dragwidget::showpos()
-{
-    return releasepoint;
+    //       QPainter painter(this);
+    //       painter.setRenderHint(QPainter::Antialiasing, true);
+    //       painter.fillPath(path, QBrush(Qt::white));
+
+//       QColor color(0, 0, 0, 50);
+//       for(int i=0; i<10; i++)
+//       {
+//           QPainterPath path;
+//           path.setFillRule(Qt::WindingFill);
+//           path.addRect(10-i, 10-i, this->width()-(10-i)*2, this->height()-(10-i)*2);
+//           color.setAlpha(150 - qSqrt(i)*50);
+//           painter.setPen(color);
+//           painter.drawPath(path);
+//       }
 }

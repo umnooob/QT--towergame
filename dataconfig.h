@@ -3,7 +3,7 @@
 #include <QMap>
 #include <QVector>
 #include <QPoint>
-#include <tower.h>
+#include <towerposition.h>
 class dataconfig
 {
 public:

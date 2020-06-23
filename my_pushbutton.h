@@ -1,11 +1,20 @@
 #ifndef MY_PUSHBUTTON_H
 #define MY_PUSHBUTTON_H
-
+#include <QPainter>
 #include <QWidget>
 #include <QPushButton>
 #include <QString>
 #include <QWidget>
 #include <dataconfig.h>
+#include <QLabel>
+#include <QDialog>
+#include <QTimer>
+#include "tower.h"
+#include "gamewindow.h"
+class tower;
+class gamewindow;
+class QPushButton;
+class QLabel;
 class My_pushbutton : public QPushButton
 {
     Q_OBJECT
@@ -25,25 +34,30 @@ signals:
 public slots:
 };
 
-class My_dragwidget :public QWidget
+
+
+//class showlabel:public QWidget
+//{
+//     Q_OBJECT
+//public:
+//    showlabel(QString,QSize size);
+
+//};
+class show_message:public QWidget
 {
     Q_OBJECT
-public:
-        My_dragwidget(QString ,QSize temsize=QSize(-1,-1));
-        void mousePressEvent(QMouseEvent *event);
-        void mouseMoveEvent(QMouseEvent *event);
-        void mouseReleaseEvent(QMouseEvent *event);
-        void paintEvent(QPaintEvent *);
-        QPoint showpos();
-        void setpos(QPoint pos);
+   public:
+    show_message(QSize,gamewindow *);
+    void changeEnemy(tower *);
+   void paintEvent(QPaintEvent *event);
+   ~show_message();
 private:
-   QPoint dragPosition;
-   QPoint setPosition;
-   QPoint releasepoint;
-   QSize size;
-   QPixmap pixmap;
-signals:
-   void want_to_set_tower();
+    QLabel *towerimage;
+    QLabel *towerlevel;
+    QLabel *towername;
+    My_pushbutton *levelup;
+    My_pushbutton *destroy;
+    gamewindow *game;
 };
 
 #endif // MY_PUSHBUTTON_H

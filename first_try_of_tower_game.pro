@@ -31,7 +31,11 @@ SOURCES += \
     choosewindow.cpp \
     gamewindow.cpp \
     dataconfig.cpp \
-    enermy.cpp
+    enermy.cpp \
+    bullet.cpp \
+    towerposition.cpp \
+    my_dragwidget.cpp
+
 
 HEADERS += \
         mainwindow.h \
@@ -40,8 +44,10 @@ HEADERS += \
     choosewindow.h \
     gamewindow.h \
     dataconfig.h \
-    enermy.h
-
+    enermy.h \
+    bullet.h \
+    towerposition.h \
+    my_dragwidget.h
 FORMS += \
         mainwindow.ui \
     choosewindow.ui \

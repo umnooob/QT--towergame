@@ -7,10 +7,11 @@ dataconfig::dataconfig()
     QVector<towerposition> data;
     QPoint pos[] =
             {
-                QPoint(252, 161),
-                QPoint(483, 286),
-                QPoint(684, 269),
-                QPoint(74, 346)
+                QPoint(260, 209),
+                QPoint(500, 400),
+                QPoint(694, 351),
+                QPoint(85, 427),
+                QPoint(500,540)
 
             };
             int len	= sizeof(pos) / sizeof(pos[0]);
@@ -43,15 +44,15 @@ dataconfig::dataconfig()
       QVector<QPoint> wp;
       QPoint wp1[] =
               {
-          QPoint(0,257),
-          QPoint(150, 257),
-          QPoint(150, 121),
-          QPoint(360, 121),
-          QPoint(410, 367),
-          QPoint(410, 94),
-          QPoint(646, 238),
-          QPoint(718, 227),
-          QPoint(712, 141),
+          QPoint(0,355),
+          QPoint(164, 355),
+          QPoint(182, 173),
+          QPoint(405, 167),
+          QPoint(410, 486),
+          QPoint(635, 486),
+          QPoint(635, 305),
+          QPoint(720, 300),
+          QPoint(723, 188)
 
               };
               len	= sizeof(wp1) / sizeof(wp1[0]);

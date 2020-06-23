@@ -42,6 +42,12 @@ choosewindow::choosewindow(QWidget *parent) :
                      delete newgame;
                      newgame=NULL;
                  });
+                 connect(newgame,&gamewindow::YOU_LOSE_GAME,[=](){
+                     newgame->hide();
+                     delete newgame;
+                     newgame=NULL;
+
+                 });
           });
     }
 
